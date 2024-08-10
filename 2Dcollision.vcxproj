@@ -146,6 +146,9 @@
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Macros.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="command.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

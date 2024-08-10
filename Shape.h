@@ -1,5 +1,7 @@
 #pragma once
 #include "Macros.h"
+#include <sstream>
+#include<iostream>
 
 
 
@@ -10,24 +12,29 @@ private:
 	static int x ;
 	int id;
 
-	sf::Vector2<float> new_pos;
 	sf::Vector2<float> new_vel;
 	std::vector<Shape*> neighbors;
 
 public:
+	sf::Vector2<float> new_pos;
+	sf::Vector2<float> prev_pos;
 	sf::Vector2<float> cur_pos;
-	sf::Vector2<float> cur_vel;
 	sf::Vector2<float> cur_acc;
+
+
+	sf::Vector2<float> cur_vel;
 	float mass;
 	
     Shape(float radius) : sf::CircleShape(radius) {
 
 
 		id = x++;
-		this->mass = 1.0f;
+		this->mass = (BALL_COUNT - id + 1) / 1000.0f;
 		this->cur_pos = this->cur_vel = this->cur_acc = sf::Vector2f(0, 0);
 		this->setOrigin(radius , radius );
 		this->setPosition(cur_pos);
+		this->setOutlineColor(sf::Color::Blue);
+		this->setOutlineThickness(-1.0f);
 
 	}
 
@@ -50,7 +57,7 @@ public:
 	}
 
 	void collisionCheck(std::vector<Shape*> balls) {
-		new_pos = cur_pos;
+
 
 		sf::Vector2f norm ;
 
@@ -60,53 +67,49 @@ public:
 		if (cur_pos.x < offset_x) {
 			norm = sf::Vector2f(1, 0);
 			new_vel = reflect(cur_vel, norm)*EFFICIENCY;
-			
-			sf::Vector2f nudge = std::abs(cur_pos.x - offset_x) * norm;
-			new_pos += nudge;
 		}
 		else if (cur_pos.x > (SCREEN_WIDTH - offset_x)) {
 			norm = sf::Vector2f(-1, 0);
 			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
-
-			sf::Vector2f nudge = std::abs(cur_pos.x - (SCREEN_WIDTH - offset_x)) * norm;
-			new_pos += nudge;
 		}
 		else if (cur_pos.y > (SCREEN_HEIGHT - getRadius())) {
 			norm = sf::Vector2f(0, -1);
 			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
-
-			sf::Vector2f nudge = std::abs(cur_pos.y - (SCREEN_HEIGHT	 - getRadius())) * norm;
-			new_pos += nudge;
 		}
 		else if (cur_pos.y < offset_y) {
 			norm = sf::Vector2f(0, 1);
 			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
-
-			sf::Vector2f nudge = std::abs(cur_pos.y - offset_y) * norm;
-			new_pos += nudge;
 		}
 		else {
 			new_vel = cur_vel;
 		}
 
+		new_pos.x = clamp(new_pos.x, offset_x, SCREEN_WIDTH - offset_x);
+		new_pos.y = clamp(new_pos.y, offset_y, SCREEN_WIDTH - getRadius());
 		
 		for (auto ball : balls) {
 			
 			if (*ball != *this) {
-				float dist = distance(ball->cur_pos, this->cur_pos);
-				if (dist < (ball->getRadius() + this->getRadius()-2.0)) {
+				float dist = distance(ball->new_pos, this->new_pos);
+				if (dist < (ball->getRadius() + this->getRadius())) {
 					neighbors.push_back(ball);
 				}
 			}
 		}
 
+
 		for (auto ball : neighbors) {
 			handleCollision(ball,neighbors.size());
 		}
+		
 
 		neighbors.clear();
 
 
+
+	}
+
+	void separateBalls(Shape* other) {
 
 	}
 	void handleCollision(Shape* other,size_t neighborcnt ) {
@@ -115,9 +118,9 @@ public:
 
 		float dist = magnitude(norm);
 		norm = normalize(norm);
-		float intersect_dist = ((this->getRadius() + other->getRadius()) -dist) / (2);
-		
-		if (intersect_dist > COLLISION_OFFSET)
+		float intersect_dist = std::fabs((this->getRadius() + other->getRadius()) - dist) / (2);
+
+
 		new_pos += intersect_dist * norm;
 		sf::Vector2f relativeVel = componentAlongNormal((this->new_vel - other->cur_vel), -norm);
 
@@ -125,11 +128,12 @@ public:
 
 		new_vel.x = clamp(new_vel.x, -MAX_VEL_COMPONENT, MAX_VEL_COMPONENT);
 		new_vel.y = clamp(new_vel.y, -MAX_VEL_COMPONENT, MAX_VEL_COMPONENT);
+
 	}
 
 	void calculate(float delta) {
 		new_pos += new_vel * delta + 0.5f * cur_acc * delta * delta;
-		new_vel += cur_acc * delta;
+		new_vel += (cur_acc * delta - new_vel*DRAG);
 	}
 	void update() {
 		cur_pos = new_pos;

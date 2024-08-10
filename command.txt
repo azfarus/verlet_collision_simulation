@@ -1,0 +1,1 @@
+ffmpeg -framerate 60 -i video/frame%d.png -c:v libx264 -pix_fmt yuv420p -r 60 output/video.mp4
