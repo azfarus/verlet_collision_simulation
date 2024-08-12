@@ -1,5 +1,11 @@
 #include "Helper.h"
 
+unsigned int current_seed = 12345;
+
+const uint64_t a = 1664525;        // Multiplier
+const uint64_t c = 1013904223;     // Increment
+const uint64_t m = 4294967296;     // Modulus (2^32)
+
 
 sf::Vector2f reflect(const sf::Vector2f& vec, const sf::Vector2f& norm) {
     float dotProduct = vec.x * norm.x + vec.y * norm.y;
@@ -49,4 +55,18 @@ sf::Vector2f componentAlongNormal(const sf::Vector2f& vec, const sf::Vector2f& n
 
 float clamp(float value, float min, float max) {
     return std::max(min, std::min(value, max));
+}
+
+
+
+// The core LCG formula that generates the next random number
+float lcg() {
+    current_seed = (a * current_seed + c) % m;  // Update the seed using LCG formula
+    return static_cast<float>(current_seed) / static_cast<float>(m);  // Normalize to [0, 1)
+}
+
+// Generates a random float between min_value and max_value
+float randomFloatInRange(float min_value, float max_value) {
+    float rand_float = lcg();  // Get a random float in [0, 1)
+    return min_value + rand_float * (max_value - min_value);  // Scale to desired range
 }

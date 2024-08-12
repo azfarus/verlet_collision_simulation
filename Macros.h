@@ -22,12 +22,12 @@ double getRandomdouble(double min, double max);
 #define FRAME_TIME (1.0/FPS)
 #define MAX_VEL_COMPONENT 1000.0f
 #define SUBFRAMES 50.0
-#define EFFICIENCY 0.65f
+#define EFFICIENCY .95f
 #define SPACING .5
 #define OFFSET 100.0
 #define COLLISION_OFFSET .8f
 #define SINGLE_SPAWN_FRAME_INTERVAL 4
-#define DRAG 0.001f
+#define DRAG 0.0001f
 
 
 

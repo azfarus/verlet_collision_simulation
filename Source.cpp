@@ -24,7 +24,10 @@ int main()
 
       
         int buff = SUBFRAMES;
-        while(buff--) handler.update((FRAME_TIME)/SUBFRAMES);
+
+
+
+        while(buff--) handler.update_structured((FRAME_TIME)/SUBFRAMES);
         if (t % SINGLE_SPAWN_FRAME_INTERVAL == 0 ) {
             handler.singleSpawner(sf::Vector2f(SCREEN_WIDTH / 2-200, SCREEN_HEIGHT - 100.0f) ,g_VALUE , sf::Vector2f(40,0));
             handler.singleSpawner(sf::Vector2f(SCREEN_WIDTH / 2-100, SCREEN_HEIGHT - 100.0f), g_VALUE, sf::Vector2f(-40, 0));

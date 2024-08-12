@@ -12,24 +12,24 @@ private:
 	static int x ;
 	int id;
 
-	sf::Vector2<float> new_vel;
 	std::vector<Shape*> neighbors;
 
 public:
-	sf::Vector2<float> new_pos;
-	sf::Vector2<float> prev_pos;
 	sf::Vector2<float> cur_pos;
+	sf::Vector2<float> cur_vel;
 	sf::Vector2<float> cur_acc;
 
+	sf::Vector2<float> new_pos;
+	sf::Vector2<float> new_vel;
 
-	sf::Vector2<float> cur_vel;
+
 	float mass;
 	
     Shape(float radius) : sf::CircleShape(radius) {
 
 
 		id = x++;
-		this->mass = (BALL_COUNT - id + 1) / 1000.0f;
+		this->mass = randomFloatInRange(1,3);
 		this->cur_pos = this->cur_vel = this->cur_acc = sf::Vector2f(0, 0);
 		this->setOrigin(radius , radius );
 		this->setPosition(cur_pos);
@@ -108,9 +108,34 @@ public:
 
 
 	}
+	void wallCheck() {
+		sf::Vector2f norm;
 
-	void separateBalls(Shape* other) {
+		float offset_x = getRadius() + BOX_WIDTH;
+		float offset_y = getRadius() + BOX_HEIGHT;
 
+		if (cur_pos.x < offset_x) {
+			norm = sf::Vector2f(1, 0);
+			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
+		}
+		else if (cur_pos.x > (SCREEN_WIDTH - offset_x)) {
+			norm = sf::Vector2f(-1, 0);
+			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
+		}
+		else if (cur_pos.y > (SCREEN_HEIGHT - getRadius())) {
+			norm = sf::Vector2f(0, -1);
+			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
+		}
+		else if (cur_pos.y < offset_y) {
+			norm = sf::Vector2f(0, 1);
+			new_vel = reflect(cur_vel, norm) * EFFICIENCY;
+		}
+		else {
+			new_vel = cur_vel;
+		}
+
+		new_pos.x = clamp(new_pos.x, offset_x, SCREEN_WIDTH - offset_x);
+		new_pos.y = clamp(new_pos.y, offset_y, SCREEN_WIDTH - getRadius());
 	}
 	void handleCollision(Shape* other,size_t neighborcnt ) {
 		sf::Vector2f norm = (this->cur_pos - other->cur_pos);
