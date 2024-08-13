@@ -5,5 +5,6 @@ Simulation of balls colliding using ```boost``` and ```SFML```.Collision simulat
 
 ### Instructions
 - You have to include `boost_1_82_0`. Just download from [here](https://archives.boost.io/release/1.82.0/source/boost_1_82_0.zip) and extract to project root directory.The directory structure should look like `<root>\boost_1_82_0\boost_1_82_0\...`.
+-Open the repo as a Visual Studio 2022 project.
 - `SFML` should already be included when the repo is cloned.
 - Change the `FILEPATH` macro to any image(ideally square) to render it using the falling balls
