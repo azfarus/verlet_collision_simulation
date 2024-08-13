@@ -38,11 +38,8 @@ public:
 		ball->getShape()->setFillColor(col);
 		ball->formAABB();
 
-
 		_shapes.push_back(ball);
 		_rtree.insert(ball->getRTreeNode());
-		
-		//ball->info();
 		
 		return true;
 	}
@@ -149,15 +146,9 @@ public:
 		Shape::_x = 0;
 	}
 
-
-	void printColorMap() {
-		printf_s("shapes.size %d", _shapes.size());
-	}
-
 	sf::Color getColor(int id) {
 
 		if (_colorMap.find(id) == _colorMap.end()) { 
-			//std::cout << "nocolor\n";
 			return sf::Color::Transparent; 
 		}
 		return _colorMap[id];

@@ -19,7 +19,6 @@ typedef bg::model::box<point> box;
 typedef std::pair<box, Shape *> rtree_value;
 
 
-double getRandomdouble(double min, double max);
 
 
 #define SCREEN_WIDTH 1200
@@ -35,14 +34,11 @@ double getRandomdouble(double min, double max);
 #define MAX_VEL_COMPONENT 1000.0f
 #define SUBFRAMES 25.0
 #define EFFICIENCY .95f
-#define SPACING .5
-#define OFFSET 100.0
-#define COLLISION_OFFSET .8f
 #define SINGLE_SPAWN_FRAME_INTERVAL 1
 #define DRAG 0.001f
 #define FILENAME "texture/amongus2.jpg"
 
-
-
 #define RANDOM_VEC2F(min,max) \
     sf::Vector2f( getRandomdouble(min,max) , getRandomdouble(min,max) )
+
+double getRandomdouble(double min, double max);

@@ -50,20 +50,16 @@ public:
 	}
 
 	rtree_value getRTreeNode() {
-
 		return rtree_value(_BB, this);
 	}
 
 	box getAABB() {
-
 		return _BB;
 	}
 
 	void update(float delta) {
-
 		pos += vel * delta + 0.5f * acc * delta * delta;
 		vel += (acc * delta - DRAG*vel);
-
 	}
 
 	virtual void setPosition() {
@@ -139,11 +135,9 @@ public:
 		return _circleShape;
 	}
 
-
 	void info() {
 		std::cout << "Ball: " << pos.x << " " << pos.y << "\n";
 	}
-
 
 };
 
