@@ -1,4 +1,4 @@
 #include "Shape.h"
 
-int Shape::x = 0;
+int Shape::_x = 0;
 
