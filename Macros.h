@@ -36,7 +36,7 @@ typedef std::pair<box, Shape *> rtree_value;
 #define EFFICIENCY .95f
 #define SINGLE_SPAWN_FRAME_INTERVAL 1
 #define DRAG 0.001f
-#define FILENAME "texture/amongus2.jpg"
+#define FILENAME "texture/amongus3.jpg"
 
 #define RANDOM_VEC2F(min,max) \
     sf::Vector2f( getRandomdouble(min,max) , getRandomdouble(min,max) )
